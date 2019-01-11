@@ -2,6 +2,7 @@
 const _idCounter = Symbol('_idCounter');
 const _modelClass = Symbol('_modelClass');
 const _data = Symbol('_data');
+const CollectionErrors = require('./CollectionErrors');
 
 /**
  * class `Collection` for storing and management of `Model`s
@@ -49,19 +50,19 @@ class Collection {
 
     storeModel(model) {
         if (!(model instanceof this[_modelClass])) {
-            throw "Models class does not belong to this collection.";
+            throw new Error(CollectionErrors.WRONG_MODEL);
         }
 
         if (!model.parent === this) {
-            throw "Models parent is not this collection."
+            throw new Error(CollectionErrors.BAD_MODEL_PARENT);
         }
 
         if (!model.id) {
-            throw "Model has no ID."
+            throw new Error(CollectionErrors.NO_MODEL_ID);
         }
 
         if (this.findById(model.id)) {
-            throw "Models ID is occupied in this collection."
+            throw new Error(CollectionErrors.OCCUPIED_ID);
         }
 
         this[_data].push(model);
@@ -78,7 +79,7 @@ class Collection {
         if (pos > -1) {
             this[_data].splice(pos, 1);
         } else {
-            throw `No element with id === ${id}.`;
+            throw new Error(CollectionErrors.NO_MODEL);
         }
     }
 

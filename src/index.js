@@ -5,3 +5,5 @@ const router = require('./router');
 app.use(router);
 
 app.listen(process.env.PORT || 3000);
+
+module.exports = app;

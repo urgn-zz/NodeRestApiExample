@@ -9,7 +9,7 @@ class User extends Model {
 
     constructor(collection, {login, email, password}) {
         super(collection);
-        
+
         this[_login] = login;
         this[_email] = email;
         this[_password] = password;
@@ -18,25 +18,34 @@ class User extends Model {
     get login() {
         return this[_login];
     }
-    
+
     set login(value) {
         this[_login] = value;
     }
 
     get email() {
-        return this.email;
+        return this[_email];
     }
-    
+
     set email(value) {
-        this.email = value;
+        this[_email] = value;
     }
 
     get password() {
-        return this.password;
+        return this[_password];
     }
-    
+
     set password(value) {
-        this.password = value;
+        this[_password] = value;
+    }
+
+    toSimpleObject() {
+        return {
+            id: this.id,
+            login: this.login,
+            email: this.email,
+            password: this.password
+        }
     }
 }
 

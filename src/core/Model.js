@@ -9,7 +9,7 @@ const _parent = Symbol('_parent');
 class Model {
 
     constructor(collection) {
-        if (!collection || !(collection instanceof Collection)) {
+        if (!collection) {
             throw new Error('Missing parent collection.');
         }
 
