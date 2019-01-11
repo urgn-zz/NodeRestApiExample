@@ -1,24 +1,26 @@
 /**
  * @apiDefine userResponse
- * @apiSuccess {Number} user.bo_user_id             Surrogate key of user entry.
- * @apiSuccess {string} user.bo_user_login          Users login name.
- * @apiSuccess {string} user.bo_user_access_level   User access level.
- * @apiSuccess {string} user.bo_user_pass           Authentifucation token of user.
+ * @apiSuccess {Number} user.id         Surrogate key of user entry.
+ * @apiSuccess {string} user.login      Users login name.
+ * @apiSuccess {string} user.email      User access level.
+ * @apiSuccess {string} user.password   Authentication token of user.
  */
 
 /**
  * @apiDefine userBodyParameters
- * @apiParam {Object} body                      Body of request.
- * @apiParam {string} body.bo_user_login        Users login name.
- * @apiParam {string} body.bo_user_access_level User access level.
- * @apiParam {string} body.bo_user_pass         Authentifucation token of user.
+ * @apiParam {Object} body              Body of request.
+ * @apiParam {string} body.login        Users login name.
+ * @apiParam {string} body.email        User access level.
+ * @apiParam {string} body.password     Authentication token of user.
  */
 
-const express = require('express'),
-    router = express.Router({mergeParams: true}),
-    UserApi = require('./api/UserApi'),
-    storage = require('./userStaticStorage'),
-    userApi = new UserApi(storage);
+const express = require('express');
+const UserApi = require('./api/UserApi');
+const ApiErrors = require('./api/ApiErrors');
+const storage = require('./userStaticStorage');
+
+let router = express.Router({mergeParams: true});
+let userApi = new UserApi(storage);
 
 /**
  * @api {get} /user Get list of users.
@@ -33,9 +35,12 @@ router.get('/', function (req, res, next) {
     try {
         let data = userApi.readAll();
         res.status(200).send(data);
-        next();
     } catch (e) {
-        res.status(500).send(e);
+        if (e.message === ApiErrors.USER_NOT_FOUND) {
+            res.status(404).send();
+        } else {
+            res.status(500).send(e);
+        }
     }
 });
 
@@ -53,13 +58,7 @@ router.get('/', function (req, res, next) {
  * @apiUse userBodyParameters
  */
 router.post("/", function (req, res, next) {
-    let attributes = mapAPItoDB(req.body);
-    db.User.create(attributes)
-        .then(user => {
-            res.status(200);
-            res.send(JSON.stringify(mapDBtoAPI(user.dataValues)));
-        })
-        .catch(err => dbErrorParser(err, res, next));
+
 });
 
 /**
@@ -76,16 +75,8 @@ router.post("/", function (req, res, next) {
  * @apiUse userBodyParameters
  */
 router.put("/:id", function (req, res, next) {
-    let id = req.params.id,
-        attributes = mapAPItoDB(req.body);
+    let id = req.params.id;
 
-    return db.User.findOne({where: {bo_user_id: id}})
-        .then(user => user.updateAttributes(attributes))
-        .then(user => {
-            res.status(200);
-            res.send(JSON.stringify(mapDBtoAPI(user.dataValues)));
-        })
-        .catch(err => dbErrorParser(err, res, next));
 });
 
 /**
@@ -102,13 +93,6 @@ router.put("/:id", function (req, res, next) {
 router.delete("/:id", function (req, res, next) {
     let id = req.params.id;
 
-    db.User.destroy({where: {bo_user_id: id}})
-        .then(() => {
-            res.status(200);
-            res.send(JSON.stringify({
-                message: "OK"
-            }));
-        }).catch(err => dbErrorParser(err, res, next));
 });
 
 module.exports = router;
