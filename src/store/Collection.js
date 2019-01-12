@@ -37,7 +37,7 @@ class Collection {
      * @returns {Model|undefined} looked up `Model`
      */
     findById(id) {
-        return this[_data].find(m => m.id === id);
+        return this[_data].find(m => m.id === Number(id));
     }
 
     /**

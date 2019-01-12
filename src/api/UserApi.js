@@ -2,7 +2,7 @@ const UserModel = require('../models/User');
 const _storage = Symbol('_storage');
 const _ = require('lodash');
 const ApiErrors = require('./ApiErrors');
-const CollectionErrors = require('../core/CollectionErrors');
+const CollectionErrors = require('../store/CollectionErrors');
 
 class UserApi {
 
@@ -11,6 +11,10 @@ class UserApi {
     }
 
     create({login, email, password}) {
+        if (_.isUndefined(login) || _.isUndefined(email) || _.isUndefined(password)) {
+            throw new Error(ApiErrors.MISSING_PARAMETERS);
+        }
+
         return new UserModel(this[_storage], {login, email, password}).toSimpleObject();
     }
 

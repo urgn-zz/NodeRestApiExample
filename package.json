@@ -4,16 +4,20 @@
   "description": "Rest API example in express js",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js --reporter spec"
+    "test": "./node_modules/mocha/bin/mocha test/**/*Test.js --reporter spec",
+    "start": "node ./src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "sinon": "^7.2.2"
+    "sinon": "^7.2.2",
+    "supertest": "^3.3.0"
   }
 }

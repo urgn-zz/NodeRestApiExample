@@ -22,6 +22,16 @@ const storage = require('./userStaticStorage');
 let router = express.Router({mergeParams: true});
 let userApi = new UserApi(storage);
 
+let handleErrors = (e, res) => {
+    if (e.message === ApiErrors.USER_NOT_FOUND) {
+        res.status(404).json({message: e.message});
+    } else if (e.message === ApiErrors.MISSING_PARAMETERS) {
+        res.status(502).json({message: e.message});
+    } else {
+        res.status(500).json({message: e.message});
+    }
+};
+
 /**
  * @api {get} /user Get list of users.
  * @apiName geUser
@@ -34,13 +44,9 @@ let userApi = new UserApi(storage);
 router.get('/', function (req, res, next) {
     try {
         let data = userApi.readAll();
-        res.status(200).send(data);
+        res.status(200).json(data);
     } catch (e) {
-        if (e.message === ApiErrors.USER_NOT_FOUND) {
-            res.status(404).send();
-        } else {
-            res.status(500).send(e);
-        }
+        handleErrors(e, res);
     }
 });
 
@@ -58,7 +64,14 @@ router.get('/', function (req, res, next) {
  * @apiUse userBodyParameters
  */
 router.post("/", function (req, res, next) {
+    let attr = req.body;
 
+    try {
+        let data = userApi.create(attr);
+        res.status(200).json(data);
+    } catch (e) {
+        handleErrors(e, res);
+    }
 });
 
 /**
@@ -75,8 +88,15 @@ router.post("/", function (req, res, next) {
  * @apiUse userBodyParameters
  */
 router.put("/:id", function (req, res, next) {
-    let id = req.params.id;
+    let id = req.params.id,
+        attr = req.body;
 
+    try {
+        let data = userApi.update(id, attr);
+        res.status(200).json(data);
+    } catch (e) {
+        handleErrors(e, res);
+    }
 });
 
 /**
@@ -92,6 +112,13 @@ router.put("/:id", function (req, res, next) {
  */
 router.delete("/:id", function (req, res, next) {
     let id = req.params.id;
+
+    try {
+        userApi.remove(id);
+        res.status(200).json({status: "OK"});
+    } catch (e) {
+        handleErrors(e, res);
+    }
 
 });
 

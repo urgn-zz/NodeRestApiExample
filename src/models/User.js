@@ -1,10 +1,13 @@
-const Model = require('../core/Model');
+const Model = require('../store/Model');
 
 //Private field access symbols
 const _login = Symbol('_login');
 const _email = Symbol('_email');
 const _password = Symbol('_password');
 
+/**
+ * class `User` extends `Model` object with fields suitable to define user
+ */
 class User extends Model {
 
     constructor(collection, {login, email, password}) {

@@ -1,9 +1,3 @@
-const express = require('express');
-const app = express();
-const router = require('./router');
-
-app.use(router);
+const app = require('./app');
 
 app.listen(process.env.PORT || 3000);
-
-module.exports = app;
