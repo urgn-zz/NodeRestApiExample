@@ -1,5 +1,5 @@
-const Collection = require('../../src/core/Collection');
-const Model = require('../../src/core/Model');
+const Collection = require('../../src/store/Collection');
+const Model = require('../../src/store/Model');
 const chai = require('chai'),
     expect = chai.expect,
     assert = chai.assert;
