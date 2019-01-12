@@ -23,6 +23,9 @@ let router = express.Router({mergeParams: true});
 let userApi = new UserApi(storage);
 
 let handleErrors = (e, res) => {
+
+    console.error(e.message);
+
     if (e.message === ApiErrors.USER_NOT_FOUND) {
         res.status(404).json({message: e.message});
     } else if (e.message === ApiErrors.MISSING_PARAMETERS) {
@@ -43,6 +46,8 @@ let handleErrors = (e, res) => {
  */
 router.get('/', function (req, res, next) {
     try {
+        console.log("All data request");
+
         let data = userApi.readAll();
         res.status(200).json(data);
     } catch (e) {
@@ -67,6 +72,8 @@ router.post("/", function (req, res, next) {
     let attr = req.body;
 
     try {
+        console.log(`New user creation. params: ${JSON.stringify(req.body)}`);
+
         let data = userApi.create(attr);
         res.status(200).json(data);
     } catch (e) {
@@ -91,6 +98,9 @@ router.put("/:id", function (req, res, next) {
     let id = req.params.id,
         attr = req.body;
 
+
+    console.log(`User update. id: ${id} params: ${JSON.stringify(attr)}`);
+
     try {
         let data = userApi.update(id, attr);
         res.status(200).json(data);
@@ -112,6 +122,8 @@ router.put("/:id", function (req, res, next) {
  */
 router.delete("/:id", function (req, res, next) {
     let id = req.params.id;
+
+    console.log(`User removal. id: ${id}`);
 
     try {
         userApi.remove(id);

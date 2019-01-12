@@ -9,6 +9,8 @@ const ApiErrors = require('../../src/api/ApiErrors');
 describe('User API class test', () => {
 
     before(() => {
+        storage.clear();
+
         this.users = [
             {
                 id: 1,

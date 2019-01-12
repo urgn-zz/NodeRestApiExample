@@ -8,7 +8,6 @@ describe("Model and collection test", () => {
 
     before(() => {
         this.collection = new Collection(Model);
-
     });
 
     it("should not be possible to create model without collection", () => {

@@ -95,6 +95,14 @@ class Collection {
     get count() {
         return this[_data].length;
     }
+
+    /**
+     * Cleans entire collection
+     */
+    clear() {
+        this[_idCounter] = 0;
+        this[_data] = [];
+    }
 }
 
 module.exports = Collection;

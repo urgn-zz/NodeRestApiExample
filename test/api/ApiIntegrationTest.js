@@ -10,6 +10,8 @@ const UserModel = require('../../src/models/User');
 describe('Integration test for the API and express route', () => {
 
     before(() => {
+        storage.clear();
+
         new UserModel(storage, {
             login: "test1",
             email: "test2",
