@@ -1,8 +1,9 @@
+const CollectionErrors = require('./CollectionErrors');
+
 //Private field access symbols
 const _idCounter = Symbol('_idCounter');
 const _modelClass = Symbol('_modelClass');
 const _data = Symbol('_data');
-const CollectionErrors = require('./CollectionErrors');
 
 /**
  * class `Collection` for storing and management of `Model`s
@@ -48,6 +49,11 @@ class Collection {
         return this[_data].slice(0);
     }
 
+    /**
+     * method to add `Model` to the `Collection`s storage
+     *
+     * @param model {Model} `Model` to add
+     */
     storeModel(model) {
         if (!(model instanceof this[_modelClass])) {
             throw new Error(CollectionErrors.WRONG_MODEL);
