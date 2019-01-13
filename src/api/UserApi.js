@@ -11,7 +11,7 @@ class UserApi {
     }
 
     create({login, email, password}) {
-        if (_.isUndefined(login) || _.isUndefined(email) || _.isUndefined(password)) {
+        if (_.isEmpty(login) || _.isEmpty(email) || _.isEmpty(password)) {
             throw new Error(ApiErrors.MISSING_PARAMETERS);
         }
 
