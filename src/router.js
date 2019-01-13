@@ -29,7 +29,7 @@ let handleErrors = (e, res) => {
     if (e.message === ApiErrors.USER_NOT_FOUND) {
         res.status(404).json({message: e.message});
     } else if (e.message === ApiErrors.MISSING_PARAMETERS) {
-        res.status(502).json({message: e.message});
+        res.status(400).json({message: e.message});
     } else {
         res.status(500).json({message: e.message});
     }
@@ -49,6 +49,28 @@ router.get('/', function (req, res, next) {
         console.log("All data request");
 
         let data = userApi.readAll();
+        res.status(200).json(data);
+    } catch (e) {
+        handleErrors(e, res);
+    }
+});
+
+/**
+ * @api {get} /user/:id Get single user data.
+ * @apiName geUser
+ * @apiVersion 0.1.0
+ * @apiGroup User
+ *
+ * @apiSuccess {Object[]} games List of the user.
+ * @apiUse userResponse
+ */
+router.get('/:id', function (req, res, next) {
+    let id = req.params.id;
+
+    try {
+        console.log("All data request");
+
+        let data = userApi.read(id);
         res.status(200).json(data);
     } catch (e) {
         handleErrors(e, res);

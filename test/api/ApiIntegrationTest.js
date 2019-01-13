@@ -89,7 +89,7 @@ describe('Integration test for the API and express route', () => {
                 .post("/user")
                 .send(newUserAttributes)
                 .set('Accept', 'application/json')
-                .expect(502)
+                .expect(400)
                 .end((err, res) => {
                     if (err) return done(err);
                     done();
