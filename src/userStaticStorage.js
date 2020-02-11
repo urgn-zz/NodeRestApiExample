@@ -1,4 +1,4 @@
-const Collection = require("./store/collection");
+const Collection = require("./store/Collection");
 const UserModel = require("./models/User");
 
 const staticUserCollection = new Collection(UserModel);
